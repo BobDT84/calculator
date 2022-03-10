@@ -1,24 +1,15 @@
 function nameMe(event){
     console.log(this.id);
     console.log(buttonValues[this.id]);
-    if(this.id in buttonValues){
-        input['current'].push(buttonValues[this.id]);
+    if(this.id in input.buttonValues){
+        input.buttonValues[this.id];
     } else {
-        input['current'].push(this.id);
+        input.current.push(this.id);
     }
     console.log(input.current);
     displayInput();
 }
 
-function deleteInput(){
-    input['current'].pop();
-    displayInput();
-}
-
-function clearInput(){
-    input['current'] = [];
-    displayInput();
-}
 
 function getPower(){
     //is this going to need to be asynchronus
@@ -50,8 +41,33 @@ for(let button of buttons){
     button.addEventListener('click', nameMe);
 }
 
-const input = {current:[], };
+const input = {
+    deleteInput(){
+        this.current.pop();
+        displayInput();
+    },
+    clearInput(){
+        this.current = [];
+        displayInput();
+    },
+    buttonValues: {
+        divide: '/',
+        delete: deleteInput(),
+        clear: clearInput(),
+        multiply: '*',
+        square: "^2 ",
+        squareRoot: '√',
+        subtract: '-',
+        power: getPower(),
+        parentheses: parentheses(),
+        add: '+',
+        equal: getResult(),
+    },
+    current:[], 
+};
+
 const output = {input:[], result:0, };
+/*
 const buttonValues = {
     divide: '/',
     delete: deleteInput(),
@@ -65,3 +81,4 @@ const buttonValues = {
     add: '+',
     equal: getResult(),
 }
+*/
