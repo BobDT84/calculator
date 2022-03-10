@@ -8,22 +8,29 @@
     padding: 20px;
 }
 
-#output {
+.output-container, .input-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 600px;
+    background-color: #767c85;
+    margin-bottom: 20px;
+}
+
+.output-container {
     height: 200px;
-    width: 600px;
-    background-color: #767c85;
-    margin-bottom: 20px;
 }
 
-#input {
+.input-container {
     height: 100px;
-    width: 600px;
-    background-color: #767c85;
-    margin-bottom: 20px;
 }
 
-#input p, #output p {
+#input, #lastInput, #result {
+    width: 100%;
     font-size: 48px;
+    text-align: right;
+    margin: 0px;
+    padding-right: 25px;
+
 }
 
 .button-container {

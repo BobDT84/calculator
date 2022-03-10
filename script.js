@@ -1,13 +1,23 @@
 function nameMe(event){
     console.log(this.id);
+    console.log(buttonValues[this.id]);
+    if(this.id in buttonValues){
+        input['current'].push(buttonValues[this.id]);
+    } else {
+        input['current'].push(this.id);
+    }
+    console.log(input.current);
+    displayInput();
 }
 
 function deleteInput(){
-    input[current].pop();
+    input['current'].pop();
+    displayInput();
 }
 
 function clearInput(){
-    input[current] = [];
+    input['current'] = [];
+    displayInput();
 }
 
 function getPower(){
@@ -29,6 +39,11 @@ function getResult(){
     clearInput();
 }
 
+function displayInput(){
+    let display = document.querySelector('#input');
+    display.innerText = input['current'].join('');
+}
+
 let buttons = document.getElementsByTagName('button');
 
 for(let button of buttons){
@@ -42,7 +57,7 @@ const buttonValues = {
     delete: deleteInput(),
     clear: clearInput(),
     multiply: '*',
-    square: '<sup>2</sup>',
+    square: "^2 ",
     squareRoot: '√',
     subtract: '-',
     power: getPower(),
