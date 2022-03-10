@@ -22,11 +22,15 @@
     margin-bottom: 20px;
 }
 
+#input p, #output p {
+    font-size: 48px;
+}
+
 .button-container {
     display: flex;
+    gap: 10px;
     height: 400px;
     width: 600px;
-    background-color: black;
 }
 
 .numbers, .operators{
