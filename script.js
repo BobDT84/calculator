@@ -1,9 +1,13 @@
-class Input {
+class Calculator {
     constructor(){
         this.input = [];
+        this.output = {
+            lastInput:[],
+            result:0,
+        }
         this.buttonFunctions = {
             delete: 'deleteInput',
-            clear: 'clearInput()',
+            clear: 'clearInput',
             power: 'getPower',
             parentheses: 'parentheses',
             equal: 'getResult',
@@ -33,13 +37,10 @@ class Input {
         this.displayInput();
     }
     displayInput(){
-        console.log('displayInput');
         let display = document.querySelector('#input');
         display.innerText = this.input.join('');
     }
     deleteInput(){
-        console.log('deleteInput');
-        console.log(this);
         this.input.pop();
         this.displayInput();
     }
@@ -62,15 +63,17 @@ class Input {
         //display result of the calculation
         //clear current input
         this.clearInput();
+        //set input to equal result to allow
+        //for chaining equations
     }
 }
 function nameMe(event){
-    const buttonValue = input.buttonValue[this.id];
-    if(this.id in input.buttonFunctions){
-        let functionName = input.buttonFunctions[this.id];
-        input[functionName]();
-    } else if(this.id in input.buttonValue){
-        input.pushInput(buttonValue);
+    const buttonValue = calculator.buttonValue[this.id];
+    if(this.id in calculator.buttonFunctions){
+        let functionName = calculator.buttonFunctions[this.id];
+        calculator[functionName]();
+    } else if(this.id in calculator.buttonValue){
+        calculator.pushInput(buttonValue);
     }
 }
 
@@ -84,12 +87,4 @@ for(let button of buttons){
 }
 
 
-const input = new Input();
-const output = {input:[], result:0, };
-const buttonFunctions = {
-    delete: input.deleteInput,
-    clear: input.clearInput,
-    power: input.getPower,
-    parentheses: input.parentheses,
-    equal: input.getResult,
-}
+const calculator = new Calculator();
