@@ -1,11 +1,12 @@
 class Calculator {
+    //Should this class declaration be in a separate file?
     constructor(){
         this.input = [];
         this.output = {
             lastInput:[],
             result:0,
         }
-        this.buttonFunctions = {
+        this.buttonFunction = {
             delete: 'deleteInput',
             clear: 'clearInput',
             power: 'getPower',
@@ -66,25 +67,40 @@ class Calculator {
         //set input to equal result to allow
         //for chaining equations
     }
+    parseOperators(){
+        let numbers = [];
+        let equation = [];
+        for(let entry of this.input){
+            if(isNaN(entry)){
+                equation.push(numbers.join(''));
+                equation.push(entry);
+                numbers = [];
+            } else {
+                numbers.push(entry);
+            }
+        }
+        return equation;
+    }
+    add(a,b){return a+b;}
+    subtract(a,b){return a-b;}
+    multiply(a,b){return a*b;}
+    divide(a,b){return a/b;}
+    power(a,b){return a**b;}
 }
-function nameMe(event){
+
+
+const calculator = new Calculator();
+function nameMe(event){//DON'T FORGET TO FIND A BETTER NAME
     const buttonValue = calculator.buttonValue[this.id];
-    if(this.id in calculator.buttonFunctions){
-        let functionName = calculator.buttonFunctions[this.id];
+    if(this.id in calculator.buttonFunction){
+        let functionName = calculator.buttonFunction[this.id];
         calculator[functionName]();
     } else if(this.id in calculator.buttonValue){
         calculator.pushInput(buttonValue);
     }
 }
 
-
-
-
 let buttons = document.getElementsByTagName('button');
-
 for(let button of buttons){
-    button.addEventListener('click', nameMe);
+    button.addEventListener('click', nameMe);//DON'T FORGET TO FIND A BETTER NAME
 }
-
-
-const calculator = new Calculator();
