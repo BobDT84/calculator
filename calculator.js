@@ -1,18 +1,19 @@
 class Calculator {
     constructor(){
         this.input = [];
-        this.firstNumber;
-        this.secondNumber;
-        this.operator;
+        this.currentDisplay = '';
+        this.firstNumber = '';
+        this.secondNumber = '';
+        this.operatorFunctionName = '';
+        this.operatorSymbol = '';
         this.canCompute = false;
         this.output = {
             lastInput:[],
             result:0,
         }
-        this.buttonFunction = {
+        this.buttonFunctions = {
             delete: 'deleteInput',
-            clear: 'clearInput',
-            parentheses: 'parentheses',
+            clear: 'clearInputDisplay',
             equal: 'compute',
         };
         this.numbers = {
@@ -37,7 +38,7 @@ class Calculator {
             add: 'add',
             power: 'power',
         };
-        this.operatorSymbol = {
+        this.operatorSymbols = {
             divide: '/',
             multiply: '*',
             square: "^2 ",
@@ -49,57 +50,78 @@ class Calculator {
     }
     storeInput(string){
         this.input.push(string);
+        this.displayInput();
+        //need logic to separate input into first number, operator, and second number
+    }
+    updateInput(string, isOperator = false){
+        if(!this.canCompute && !isOperator){
+            this.setFirstNumber(string);
+            this.currentDisplay = this.firstNumber;
+        } else if(this.canCompute){
+            this.setSecondNumber(string)
+            this.currentDisplay = this.firstNumber + this.operatorSymbol + this.secondNumber;
+        }
+        if(isOperator){
+            this.operatorSymbol = this.operatorSymbols[string];
+            this.currentDisplay = this.firstNumber + this.operatorSymbol; 
+        }
+        this.displayInput();
     }
     displayInput(){
-        let input = [];
-        if(this.firstNumber){
-            input.push(this.firstNumber);
-        } else if(this.operator){
-            input.push(this.operatorSymbol[this.operator]);
-        } else if(this.secondNumber){
-            input.push(this.secondNumber);
-        }
         let display = document.querySelector('#input');
-        display.innerText = this.input.join('');
+        display.innerText = this.currentDisplay;
     }
     displayOutput(string){
         let lastInput = document.querySelector('#lastInput');
-        lastInput.innerText = this.output['lastInput'].join('');
+        lastInput.innerText = this.output['lastInput'];
         let result = document.querySelector('#result');
         result.innerText = this.output['result'];
     }
     deleteInput(){
-        this.input.pop();
+        //Previous refactoring has broken this method
+        //TODO 
+        let newDisplay = this.currentDisplay.split('');
+        newDisplay.pop()
+        this.currentDisplay = newDisplay.join('');
         this.displayInput();
     }
-    clearInput(){
-        this.input = [];
+    clearInputDisplay(){
+        this.currentDisplay = '';
+        this.firstNumber = '';
+        this.operatorSymbol = '';
+        this.operatorFunctionName = '';
+        this.secondNumber = '';
+        this.canCompute = false;
         this.displayInput();
     }
     compute(){
-        let operator = this.operator
-        this.output['lastInput'] = this.input;
-        console.log(this[operator]);
-        console.log();
-        this.output['result'] = operator(this.firstNumber,this.secondNumber);
+        let operator = this.operatorFunctionName;
+        this.output['lastInput'] = this.currentDisplay;
+        let num1 = Number(this.firstNumber);
+        let num2 = Number(this.secondNumber);
+        this.output['result'] = this[operator](num1, num2);
+        this.clearInputDisplay();
         this.displayOutput();
-        this.clearInput();
-        this.displayInput(this.output.result);
-        this.canCompute = false;
-        this.operator = '';
+        this.firstNumber = this.output.result;
+        this.currentDisplay = this.firstNumber;
+        this.displayInput();
     }
-    setFirstNumber(){
-        this.firstNumber = this.input.join('');
-        this.clearInput();
+    setFirstNumber(string){
+        this.firstNumber += string;
     }
-    setSecondNumber(){
-        this.secondNumber = this.input.join('');
-        this.clearInput();
+    setSecondNumber(string){
+        this.secondNumber += string;
     }
     handleOperator(operatorString){
         switch(true){
             case this.canCompute:
                 this.compute();
+                this.operatorFunctionName = operatorString;
+                this.updateInput(operatorString,true);
+            case !this.canCompute:
+                this.updateInput(operatorString, true);
+                this.operatorFunctionName = operatorString;
+                this.canCompute = true;
         }
     }
     add(a,b){return a+b;}
