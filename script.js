@@ -20,9 +20,12 @@ function runCalculator(event){
     }
 }
 
-let buttons = document.getElementsByTagName('button');
-for(let button of buttons){
-    button.addEventListener('click', runCalculator);
+function main(){
+    let buttons = document.getElementsByTagName('button');
+    for(let button of buttons){
+        button.addEventListener('click', runCalculator);
+    }
+    document.onkeydown = runCalculator;
 }
 
-document.onkeydown = runCalculator;
+main();
