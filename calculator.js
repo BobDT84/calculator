@@ -12,7 +12,7 @@ class Calculator {
             result:0,
         }
         this.buttonFunctions = {
-            delete: 'deleteInput',
+            delete: 'delete',
             clear: 'clearInputDisplay',
             equal: 'compute',
         };
@@ -48,11 +48,6 @@ class Calculator {
             power: '^',
         };
     }
-    storeInput(string){
-        this.input.push(string);
-        this.displayInput();
-        //need logic to separate input into first number, operator, and second number
-    }
     updateInput(string, isOperator = false){
         if(!this.canCompute && !isOperator){
             this.setFirstNumber(string);
@@ -77,12 +72,19 @@ class Calculator {
         let result = document.querySelector('#result');
         result.innerText = this.output['result'];
     }
-    deleteInput(){
-        //Previous refactoring has broken this method
-        //TODO 
-        let newDisplay = this.currentDisplay.split('');
-        newDisplay.pop()
-        this.currentDisplay = newDisplay.join('');
+    delete(){
+        if(!this.canCompute && !this.operatorFunctionName && this.firstNumber){
+            this.firstNumber = this.firstNumber.slice(0,-1);
+            this.currentDisplay = this.firstNumber;
+        } else if(this.canCompute && this.secondNumber){
+            this.secondNumber = this.secondNumber.slice(0,-1);
+            this.currentDisplay = this.firstNumber + this.operatorSymbol + this.secondNumber;
+        }else if(this.operatorFunctionName && !this.secondNumber){
+            this.operatorFunctionName = '';
+            this.operatorSymbol = '';
+            this.canCompute = false;
+            this.currentDisplay = this.firstNumber;
+        }
         this.displayInput();
     }
     clearInputDisplay(){
@@ -107,10 +109,10 @@ class Calculator {
         this.displayInput();
     }
     setFirstNumber(string){
-        this.firstNumber += string;
+        this.firstNumber += this.numbers[string];
     }
     setSecondNumber(string){
-        this.secondNumber += string;
+        this.secondNumber += this.numbers[string];
     }
     handleOperator(operatorString){
         switch(true){

@@ -6,7 +6,7 @@ function runCalculator(event){
             break;
         case this.id in calculator.buttonFunctions:
             let functionName = calculator.buttonFunctions[this.id];
-            console.log(calculator[functionName]());
+            console.log(calculator[functionName]);
             calculator[functionName]();
             break;
         case  this.id in calculator.operatorSymbols:
