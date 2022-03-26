@@ -94,10 +94,16 @@ class Calculator {
         this.displayInput();
     }
     setFirstNumber(string){
-        this.firstNumber += this.numbers[string];
+        if(string == 'decimal'){
+            string = '.';
+        }
+        this.firstNumber += string;
     }
     setSecondNumber(string){
-        this.secondNumber += this.numbers[string];
+        if(string == 'decimal'){
+            string = '.';
+        }
+        this.secondNumber += string;
     }
     handleOperator(operatorString){
         let operatorFunctionName = '';
