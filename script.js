@@ -1,16 +1,22 @@
 const calculator = new Calculator();
 function runCalculator(event){
+    let input = '';
+    if(event.key){
+        input = event.key.toUpperCase();
+    } else if(this.id){
+        input = this.id;
+    }
     switch(true){
-        case this.id in calculator.numbers:
-            calculator.updateInput(this.id);
+        case calculator.numbers.includes(input):
+            calculator.updateInput(input);
             break;
-        case this.id in calculator.buttonFunctions:
-            let functionName = calculator.buttonFunctions[this.id];
-            console.log(calculator[functionName]);
+        case input in calculator.buttonFunctions:
+            let functionName = calculator.buttonFunctions[input];
             calculator[functionName]();
             break;
-        case  this.id in calculator.operatorSymbols:
-            calculator.handleOperator(this.id);
+        case  input in calculator.operatorSymbols || calculator.operators.includes(input):
+            calculator.handleOperator(input);
+            break;
     }
 }
 
@@ -18,3 +24,5 @@ let buttons = document.getElementsByTagName('button');
 for(let button of buttons){
     button.addEventListener('click', runCalculator);
 }
+
+document.onkeydown = runCalculator;

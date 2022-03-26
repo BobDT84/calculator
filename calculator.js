@@ -15,29 +15,14 @@ class Calculator {
             delete: 'delete',
             clear: 'clearInputDisplay',
             equal: 'compute',
+            D: 'delete',
+            C: 'clearInputDisplay',
+            ENTER: 'compute',
+            BACKSPACE: 'delete',
+            DELETE: 'delete',
         };
-        this.numbers = {
-            0: '0',
-            1: '1',
-            2: '2',
-            3: '3',
-            4: '4',
-            5: '5',
-            6: '6',
-            7: '7',
-            8: '8',
-            9: '9',
-            decimal: '.',
-        };
-        this.operators = {
-            divide: 'divide',
-            multiply: 'multiply',
-            square: "square",
-            squareRoot: 'squareRoot',
-            subtract: 'subtract',
-            add: 'add',
-            power: 'power',
-        };
+        this.numbers = '0123456789.decimal';
+        this.operators = '+-*/^'
         this.operatorSymbols = {
             divide: '/',
             multiply: '*',
@@ -115,14 +100,32 @@ class Calculator {
         this.secondNumber += this.numbers[string];
     }
     handleOperator(operatorString){
+        let operatorFunctionName = '';
+        if(operatorString in this.operatorSymbols){
+            //If operatorString from DOM element id, then no extra handling needed
+            //The DOM element id's match the function names
+            operatorFunctionName = operatorString;
+        } else if(this.operators.includes(operatorString)){
+            //If operatorString is from a keypress and has a value like '+'
+            //Then the object literal operatorSymbols must be looped through
+            //to get the key that matches the operator symbols, and will be
+            //stored as the operator's function name
+            let object = this.operatorSymbols;
+            for(let key in object){
+                if(object[key] == operatorString){
+                    operatorFunctionName = key;
+                    break;
+                }
+            }
+        }
         switch(true){
             case this.canCompute:
                 this.compute();
-                this.operatorFunctionName = operatorString;
-                this.updateInput(operatorString,true);
+                this.operatorFunctionName = operatorFunctionName;
+                this.updateInput(operatorFunctionName,true);
             case !this.canCompute:
-                this.updateInput(operatorString, true);
-                this.operatorFunctionName = operatorString;
+                this.updateInput(operatorFunctionName, true);
+                this.operatorFunctionName = operatorFunctionName;
                 this.canCompute = true;
         }
     }
